@@ -1,5 +1,5 @@
 export const home = (req, res) => {
-  res.send('home');
+  res.render('home', { pageTitle: 'Home' });
 };
 
 export const search = (req, res) => {
