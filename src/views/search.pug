@@ -1,0 +1,12 @@
+extends templates/layout.pug
+include mixins/video.pug
+
+block content
+  form(method='get')
+    input(type='text' name='title' placeHolder='Video title' required)
+    input(type='submit' value='Search')
+  hr
+  each video in videos
+    +video(video)
+  else
+    li Sorry, There are no matched videos.

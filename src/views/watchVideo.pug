@@ -1,0 +1,12 @@
+extends templates/layout.pug
+
+block content
+  h2=video.title
+  i=video.createdAt
+  p=`${video.meta.views} views` 
+  p=`${video.meta.rating} / 5`
+  h5=video.description
+  p=video.hashtags
+  hr
+  a(href=`/videos/${video.id}/edit`) Edit Video&nbsp;&nbsp;
+  a(href=`/videos/${video.id}/delete`) Delete Video
