@@ -1,0 +1,10 @@
+extends ../templates/layout.pug
+
+block content
+  p=errorMessage
+  form(method='post')
+    input(type='text' name='userId' placeholder='User ID' required) 
+    input(type='password' name='password' placeholder='User Password' required)
+    input(type='submit' value='Login')
+    hr
+    a(href='/join') Don't have account? &rarr;

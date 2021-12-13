@@ -1,0 +1,9 @@
+extends ../templates/layout
+
+block content
+  p=errorMessage
+  form(method='post')
+    input(type='password' name='originPwd' placeholder='Old Password' required)
+    input(type='password' name='newPwd' placeholder='New Password' required)
+    input(type='password' name='confirmationPwd' placeholder='Confirm New Password' required)
+    input(type='submit' value='Change Password')

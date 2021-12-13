@@ -1,8 +1,17 @@
 import express from 'express';
-import { editUser, deleteUser } from '../controller/userController.js';
+import {
+  getEditUser,
+  postEditUser,
+  getTrueLeave,
+  postTrueLeave,
+  getChangePwd,
+  postChangePwd,
+} from '../controller/userController.js';
+
 const userRouter = express.Router();
 
-userRouter.get('/:id([0-9]+)/edit', editUser);
-userRouter.get('/:id([0-9]+)/delete', deleteUser);
+userRouter.route('/:id([0-9a-z]{24})/edit').get(getEditUser).post(postEditUser);
+userRouter.route('/:id([0-9a-z]{24})/trueLeave').get(getTrueLeave).post(postTrueLeave);
+userRouter.route('/:id([0-9a-z]{24})/change-password').get(getChangePwd).post(postChangePwd);
 
 export default userRouter;

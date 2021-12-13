@@ -1,0 +1,14 @@
+extends ../templates/layout.pug
+
+block content
+  form(method='post')
+    input(type='text' name='userId' value=`${user.userId}` placeholder='User Id' required)
+    input(type='email' name='email' value=`${user.email}` placeholder='Email' required)
+    input(type='text' name='location' value=`${user.location}` placeholder='User Locaton')
+    input(type='submit' value='Edit Profile')
+    hr
+    ul
+      li
+        a(href=`/users/${user._id}/change-password`) Change Password
+      li
+        a(href=`/users/${user._id}/trueLeave`) Delete User

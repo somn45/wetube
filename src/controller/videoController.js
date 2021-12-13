@@ -2,13 +2,13 @@ import Video from '../models/Video.js';
 
 export const home = async (req, res) => {
   const videos = await Video.find();
-  res.render('home', { pageTitle: 'Home', videos });
+  res.render('videoPug/home', { pageTitle: 'Home', videos });
 };
 
 export const watchVideo = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id);
-  res.render('watchVideo', { pageTitle: video.title, video });
+  res.render('videoPug/watchVideo', { pageTitle: video.title, video });
 };
 
 export const searchVideo = async (req, res) => {
@@ -22,11 +22,11 @@ export const searchVideo = async (req, res) => {
     });
     videos = filteredVideos;
   }
-  return res.render('search', { pageTitle: 'Search Video', videos });
+  return res.render('videoPug/search', { pageTitle: 'Search Video', videos });
 };
 
 export const getUploadVideo = (req, res) => {
-  res.render('uploadVideo', { pageTitle: 'Upload Video' });
+  res.render('videoPug/uploadVideo', { pageTitle: 'Upload Video' });
 };
 
 export const postUploadVideo = async (req, res) => {
@@ -45,7 +45,7 @@ export const postUploadVideo = async (req, res) => {
 export const getEditVideo = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id);
-  res.render('editVideo', { pageTitle: 'Edit Video', video });
+  res.render('videoPug/editVideo', { pageTitle: 'Edit Video', video });
 };
 
 export const postEditVideo = async (req, res) => {

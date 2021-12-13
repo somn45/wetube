@@ -1,0 +1,16 @@
+extends ../templates/layout.pug
+
+block content
+  p=errorMessage
+  form(method='post')
+    p Required Input
+    input(type='text' name='userId' placeholder='User ID' required) 
+    input(type='password' name='password' placeholder='User Password' required)
+    input(type='password' name='password2' placeholder='Confirm Password' required)
+    input(type='email' name='email' placeholder='User email' required)
+    hr
+    p Select Input
+    input(type='text' name='location' placeholder='location')
+    input(type='submit' value='Join')
+    hr
+    a(href='/login') Already have account? &rarr;

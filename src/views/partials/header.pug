@@ -8,3 +8,13 @@ header
         a(href='/videos/upload') Upload Video
       li
         a(href='/search') Search Video
+      if !loggedIn
+        li
+          a(href='/login') Login
+      else
+        li
+          a(href='/logout') Log out
+        li
+          a(href=`/users/${user._id}/edit`) My profile
+      li
+        a(href='/join') join

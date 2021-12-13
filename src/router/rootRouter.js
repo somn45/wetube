@@ -1,12 +1,13 @@
 import express from 'express';
 import { home, searchVideo } from '../controller/videoController.js';
-import { join, login } from '../controller/userController.js';
+import { getJoin, postJoin, getLogin, postLogin, logout } from '../controller/userController.js';
 
 const rootRouter = express.Router();
 
 rootRouter.get('/', home);
-rootRouter.get('/join', join);
-rootRouter.get('/login', login);
+rootRouter.route('/join').get(getJoin).post(postJoin);
+rootRouter.route('/login').get(getLogin).post(postLogin);
+rootRouter.get('/logout', logout);
 rootRouter.get('/search', searchVideo);
 
 export default rootRouter;
