@@ -7,6 +7,7 @@ const userSchema = mongoose.Schema({
   isSocial: { type: Boolean, default: false },
   email: { type: String, required: true, unique: true },
   location: { type: String },
+  avatarUrl: { type: String },
 });
 
 userSchema.pre('save', async function () {

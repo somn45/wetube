@@ -31,10 +31,12 @@ export const getUploadVideo = (req, res) => {
 
 export const postUploadVideo = async (req, res) => {
   const { title, description, hashtags } = req.body;
+  const { file } = req;
   const video = await Video.create({
     title,
     description,
     hashtags: hashtags.split(',').map((tag) => (tag.startsWith('#') ? tag : `#${tag}`)),
+    videoUrl: file ? file.path : '',
   });
   if (!video) {
     res.status(404).redirect('/videos/upload');

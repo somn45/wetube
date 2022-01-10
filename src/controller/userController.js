@@ -62,6 +62,7 @@ export const getEditUser = async (req, res) => {
 
 export const postEditUser = async (req, res) => {
   const { id } = req.params;
+  const { file } = req;
   const { userId, email, location } = req.body;
   await User.findByIdAndUpdate(
     id,
@@ -69,6 +70,7 @@ export const postEditUser = async (req, res) => {
       userId,
       email,
       location,
+      avatarUrl: file ? file.path : '',
     },
     { new: true }
   );
@@ -184,6 +186,7 @@ export const finishGithubLogin = async (req, res) => {
         },
       })
     ).json();
+    console.log(userData);
     const emailData = await (
       await fetch(`${apiUrl}/user/emails`, {
         headers: {
@@ -207,13 +210,14 @@ export const finishGithubLogin = async (req, res) => {
         isSocial: true,
         email: certifiedEmail.email,
         location: userData.location ?? '',
+        avatarUrl: userData.avatar_url,
       });
     }
     req.session.loggedIn = true;
     req.session.user = user;
     return res.redirect('/');
   } else {
-    return res.redirect('/login');
+    res.redirect('/login');
   }
   res.redirect('/');
 };

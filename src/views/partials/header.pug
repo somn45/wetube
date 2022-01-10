@@ -11,10 +11,10 @@ header
       if !loggedIn
         li
           a(href='/login') Login
+        li
+          a(href='/join') join
       else
         li
           a(href='/logout') Log out
         li
           a(href=`/users/${user._id}/edit`) My profile
-      li
-        a(href='/join') join

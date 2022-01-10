@@ -1,7 +1,13 @@
 extends ../templates/layout.pug
 
 block content
-  form(method='post')
+  if(user.avatarUrl)
+    img(src='/' + user.avatarUrl)
+  else
+    img(src='/assets/img/default.jpg' alt='default image')
+  form(method='post' enctype='multipart/form-data')
+    label(for='avatar')
+    input(type='file' name='avatar' id='avatar' accept='image/*')
     input(type='text' name='userId' value=`${user.userId}` placeholder='User Id' required)
     input(type='email' name='email' value=`${user.email}` placeholder='Email' required)
     input(type='text' name='location' value=`${user.location}` placeholder='User Locaton')

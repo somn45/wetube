@@ -1,7 +1,9 @@
 extends ../templates/layout.pug
 
 block content
-  form(method='post')
+  form(method='post' enctype='multipart/form-data')
+    label(for='video') Video File
+    input(type='file' name='video' id='video' accept='video/*')
     input(type='text' name='title', placeHolder='Video title' required)
     input(type='text' name='description', placeHolder='Video Description' required)
     span ※ Hashtags separated by comma 

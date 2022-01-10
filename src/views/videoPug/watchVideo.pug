@@ -1,6 +1,7 @@
 extends ../templates/layout.pug
 
 block content
+  video(src='/' + video.videoUrl controls)
   h2=video.title
   i=video.createdAt
   p=`${video.meta.views} views` 
