@@ -1,5 +1,6 @@
 import User from '../models/User';
 import bcrypt from 'bcrypt';
+import fetch from 'node-fetch';
 
 export const getJoin = (req, res) => {
   res.render('user/join', { pageTitle: 'Join' });
@@ -140,5 +141,79 @@ export const postChangePwd = async (req, res) => {
   }
   const hashedNewPwd = await bcrypt.hash(newPwd, 5);
   await User.updateOne({ _id: user._id }, { password: hashedNewPwd });
+  res.redirect('/');
+};
+
+export const startGithubLogin = (req, res) => {
+  const baseUrl = 'https://github.com/login/oauth/authorize';
+  const config = {
+    client_id: process.env.CLIENT_ID,
+    redirect_url: 'http://localhost:4000/users/github/finish',
+    scope: 'read:user user:email',
+  };
+  const option = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${option}`;
+  res.redirect(finalUrl);
+};
+
+export const finishGithubLogin = async (req, res) => {
+  const baseUrl = 'https://github.com/login/oauth/access_token';
+  const config = {
+    client_id: process.env.CLIENT_ID,
+    client_secret: process.env.CLIENT_SECRET,
+    code: req.query.code,
+  };
+  const option = new URLSearchParams(config).toString();
+  const finalUrl = `${baseUrl}?${option}`;
+
+  const tokenRequest = await (
+    await fetch(finalUrl, {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+      },
+    })
+  ).json();
+  if ('access_token' in tokenRequest) {
+    const { access_token } = tokenRequest;
+    const apiUrl = 'https://api.github.com';
+    const userData = await (
+      await fetch(`${apiUrl}/user`, {
+        headers: {
+          Authorization: `token ${access_token}`,
+        },
+      })
+    ).json();
+    const emailData = await (
+      await fetch(`${apiUrl}/user/emails`, {
+        headers: {
+          Authorization: `token ${access_token}`,
+        },
+      })
+    ).json();
+    const certifiedEmail = emailData.find(
+      (email) => email.primary === true && email.verified === true
+    );
+    if (!certifiedEmail) {
+      return res.redirect('/login');
+    }
+    let user = await User.findOne({
+      email: certifiedEmail.email,
+    });
+    if (!user) {
+      user = await User.create({
+        userId: userData.login,
+        password: '',
+        isSocial: true,
+        email: certifiedEmail.email,
+        location: userData.location ?? '',
+      });
+    }
+    req.session.loggedIn = true;
+    req.session.user = user;
+    return res.redirect('/');
+  } else {
+    return res.redirect('/login');
+  }
   res.redirect('/');
 };

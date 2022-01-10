@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import express from 'express';
 import morgan from 'morgan';
 import session from 'express-session';
@@ -25,7 +26,7 @@ app.use(
     cookie: {
       maxAge: 604800000,
     },
-    store: MongoStore.create({ mongoUrl: 'mongodb://127.0.0.1:27017/Wetube_practice' }),
+    store: MongoStore.create({ mongoUrl: process.env.DB_URL }),
   })
 );
 app.use(localsMiddleware);
