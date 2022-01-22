@@ -11,7 +11,8 @@ export const postJoin = async (req, res) => {
   if (password !== password2) {
     return res.status(400).render('user/join', {
       pageTitle: 'Join',
-      errorMessage: 'Password field and password confirmation field do not match',
+      errorMessage:
+        'Password field and password confirmation field do not match',
     });
   }
   const user = await User.create({
@@ -31,15 +32,17 @@ export const postLogin = async (req, res) => {
   const { userId, password } = req.body;
   const user = await User.findOne({ userId });
   if (!user) {
-    return res
-      .status(400)
-      .render('user/login', { pageTitle: 'Login', errorMessage: 'User ID does not exist' });
+    return res.status(400).render('user/login', {
+      pageTitle: 'Login',
+      errorMessage: 'User ID does not exist',
+    });
   }
   const checkedPwd = await bcrypt.compare(password, user.password);
   if (!checkedPwd) {
-    return res
-      .status(400)
-      .render('user/login', { pageTitle: 'Login', errorMessage: "Password don't match" });
+    return res.status(400).render('user/login', {
+      pageTitle: 'Login',
+      errorMessage: "Password don't match",
+    });
   }
   req.session.loggedIn = true;
   req.session.user = user;
@@ -53,7 +56,7 @@ export const logout = (req, res) => {
 
 export const getEditUser = async (req, res) => {
   const { id } = req.params;
-  const user = await User.findById(id);
+  const user = await User.findById(id).populate('videos');
   if (!user) {
     return res.status(404).render('404', { pageTitle: '404 Error' });
   }
@@ -98,8 +101,6 @@ export const postTrueLeave = async (req, res) => {
     });
   }
   const confirmationWord = 'Wetube byebye';
-  console.log(confirmationWord);
-  console.log(lastWord);
   if (confirmationWord !== lastWord) {
     return res.status(400).render('user/trueLeave', {
       pageTitle: 'True Leave?',
@@ -132,13 +133,15 @@ export const postChangePwd = async (req, res) => {
   if (newPwd !== confirmationPwd) {
     return res.status(400).render('user/changePwd', {
       pageTitle: 'Change Password',
-      errorMessage: 'Password field and password confirmation field do not match',
+      errorMessage:
+        'Password field and password confirmation field do not match',
     });
   }
   if (originPwd === newPwd) {
     return res.status(400).render('user/changePwd', {
       pageTitle: 'Change Password',
-      errorMessage: 'The new password is the same as the previous password and cannot be changed',
+      errorMessage:
+        'The new password is the same as the previous password and cannot be changed',
     });
   }
   const hashedNewPwd = await bcrypt.hash(newPwd, 5);
@@ -186,7 +189,6 @@ export const finishGithubLogin = async (req, res) => {
         },
       })
     ).json();
-    console.log(userData);
     const emailData = await (
       await fetch(`${apiUrl}/user/emails`, {
         headers: {

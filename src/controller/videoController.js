@@ -1,4 +1,5 @@
 import Video from '../models/Video.js';
+import User from '../models/User.js';
 
 export const home = async (req, res) => {
   const videos = await Video.find();
@@ -7,7 +8,7 @@ export const home = async (req, res) => {
 
 export const watchVideo = async (req, res) => {
   const { id } = req.params;
-  const video = await Video.findById(id);
+  const video = await Video.findById(id).populate('owner');
   res.render('videoPug/watchVideo', { pageTitle: video.title, video });
 };
 
@@ -32,11 +33,18 @@ export const getUploadVideo = (req, res) => {
 export const postUploadVideo = async (req, res) => {
   const { title, description, hashtags } = req.body;
   const { file } = req;
+  const user = req.session.user;
   const video = await Video.create({
     title,
     description,
-    hashtags: hashtags.split(',').map((tag) => (tag.startsWith('#') ? tag : `#${tag}`)),
+    hashtags: hashtags
+      .split(',')
+      .map((tag) => (tag.startsWith('#') ? tag : `#${tag}`)),
     videoUrl: file ? file.path : '',
+    owner: user._id,
+  });
+  await User.findByIdAndUpdate(user._id, {
+    videos: [...user.videos, video._id],
   });
   if (!video) {
     res.status(404).redirect('/videos/upload');

@@ -3,6 +3,9 @@ extends ../templates/layout.pug
 block content
   video(src='/' + video.videoUrl controls)
   h2=video.title
+  div
+    p Registrant :
+    a(href=`/users/${video.owner._id}/edit`)=video.owner.userId
   i=video.createdAt
   p=`${video.meta.views} views` 
   p=`${video.meta.rating} / 5`

@@ -8,6 +8,7 @@ const userSchema = mongoose.Schema({
   email: { type: String, required: true, unique: true },
   location: { type: String },
   avatarUrl: { type: String },
+  videos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'videos' }],
 });
 
 userSchema.pre('save', async function () {
